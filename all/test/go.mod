@@ -1,4 +1,4 @@
-module github.com/namely/docker-protoc/test
+module github.com/skuznetsov/docker-protoc/test
 
 go 1.19
 

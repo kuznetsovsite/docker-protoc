@@ -2,7 +2,7 @@
 set -e
 
 printUsage() {
-    echo "gen-proto generates grpc and protobuf @ Namely"
+    echo "gen-proto generates grpc and protobuf @ skuznetsov"
     echo " "
     echo "Usage: gen-proto -f my-service.proto -l go"
     echo " "

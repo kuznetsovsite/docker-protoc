@@ -695,7 +695,7 @@ func (s *TestSuite) TestAllCases() {
 				// Let's add something that with the same name as a standard library module to the test
 				// directory as a regression test.
 				//
-				// Further context: https://github.com/namely/docker-protoc/pull/356
+				// Further context: https://github.com/skuznetsov/docker-protoc/pull/356
 				_, err = os.OpenFile(path.Join(dir, "io.py"), os.O_RDONLY|os.O_CREATE, 0666)
 				s.Require().NoError(err)
 

@@ -1,8 +1,8 @@
 # gRPC/Protocol Buffer Compiler Containers
 
-[![Codacy Badge](https://img.shields.io/codacy/grade/e20c6e95969a4926abd1dc778e8c8e7e?style=flat-square)](https://app.codacy.com/gh/namely/docker-protoc/dashboard)
-[![Master](https://github.com/namely/docker-protoc/actions/workflows/master.yml/badge.svg)](https://github.com/namely/docker-protoc/actions/workflows/master.yml)
-[![Docker Pulls](https://img.shields.io/docker/pulls/namely/protoc-all?style=flat-square)](https://hub.docker.com/r/namely/protoc-all)
+[![Codacy Badge](https://img.shields.io/codacy/grade/e20c6e95969a4926abd1dc778e8c8e7e?style=flat-square)](https://app.codacy.com/gh/skuznetsov/docker-protoc/dashboard)
+[![Master](https://github.com/skuznetsov/docker-protoc/actions/workflows/master.yml/badge.svg)](https://github.com/skuznetsov/docker-protoc/actions/workflows/master.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/skuznetsov/protoc-all?style=flat-square)](https://hub.docker.com/r/skuznetsov/protoc-all)
 
 This repository contains support for various Docker images that wrap `protoc`,
 `prototool`, `grpc_cli` commands with [gRPC](https://github.com/grpc/grpc) support
@@ -14,11 +14,11 @@ language you want to generate.
 ## Features
 
 *   Docker images for:
-    *   `protoc` with `namely/protoc` (automatically includes `/usr/local/include`)
-    *   [Uber's Prototool](https://github.com/uber/prototool) with `namely/prototool`
-    *   A custom generation script to facilitate common use-cases with `namely/protoc-all` (see below)
-    *   `grpc_cli` with `namely/grpc-cli`
-    *   [gRPC Gateway](https://github.com/grpc-ecosystem/grpc-gateway) using a custom go-based server with `namely/gen-grpc-gateway`
+    *   `protoc` with `skuznetsov/protoc` (automatically includes `/usr/local/include`)
+    *   [Uber's Prototool](https://github.com/uber/prototool) with `skuznetsov/prototool`
+    *   A custom generation script to facilitate common use-cases with `skuznetsov/protoc-all` (see below)
+    *   `grpc_cli` with `skuznetsov/grpc-cli`
+    *   [gRPC Gateway](https://github.com/grpc-ecosystem/grpc-gateway) using a custom go-based server with `skuznetsov/gen-grpc-gateway`
 *   [Google APIs](https://github.com/googleapis/googleapis) included in `/opt/include/google`
 *   [Protobuf library artifacts](https://github.com/google/protobuf/tree/master/src/google/protobuf) included in `/opt/include/google/protobuf`.  NOTE: `protoc` would only need part of the path i.e. `-I /opt/include` if you import WKTs like so:
 
@@ -38,14 +38,14 @@ If you're having trouble, see [Docker troubleshooting](#docker-troubleshooting) 
 ## Tag Conventions
 
 For `protoc`, `grpc_cli` and `prototool` a pattern of `<GRPC_VERSION>_<CONTAINER_VERSION>` is used for all images (or `<GRPC_VERSION>_<CONTAINER_VERSION>-rc.<PRERELEASE_NUMBER>`) for pre-releases).
-Example is `namely/protoc-all:1.15_0` for gRPC version `1.15` (or `namely/protoc-all:1.15_0-rc.1` for a pre-release). The `latest` tag will always point to the most recent version.
+Example is `skuznetsov/protoc-all:1.15_0` for gRPC version `1.15` (or `skuznetsov/protoc-all:1.15_0-rc.1` for a pre-release). The `latest` tag will always point to the most recent version.
 
 ## Usage
 
 Pull the container:
 
 ```sh
-$ docker pull namely/protoc-all
+$ docker pull skuznetsov/protoc-all
 ```
 
 After that, change working directory to the one that contains your `.proto` definition
@@ -55,12 +55,12 @@ So if you have a directory: `~/my_project/protobufs/` that has: `myproto.proto`,
 
 ```sh
 $ cd ~/my_project/protobufs
-$ docker run -v $PWD:/defs namely/protoc-all -f myproto.proto -l ruby #or go, csharp, etc
+$ docker run -v $PWD:/defs skuznetsov/protoc-all -f myproto.proto -l ruby #or go, csharp, etc
 ```
 
 ```powershell
 PS> cd ~/my_project/protobufs
-PS> docker run -v ${pwd}:/defs namely/protoc-all -f myproto.proto -l ruby #or go, csharp, etc
+PS> docker run -v ${pwd}:/defs skuznetsov/protoc-all -f myproto.proto -l ruby #or go, csharp, etc
 ```
 
 The container automatically puts the compiled files into a `gen` directory with
@@ -84,9 +84,9 @@ input. To remove the `protorepo` you need to add an include and change the
 import:
 
 ```sh
-$ docker run ... namely/protoc-all -i protorepo -f catalog/catalog.proto -l go
+$ docker run ... skuznetsov/protoc-all -i protorepo -f catalog/catalog.proto -l go
 # instead of
-$ docker run ... namely/protoc-all -f protorepo/catalog/catalog.proto -l go
+$ docker run ... skuznetsov/protoc-all -f protorepo/catalog/catalog.proto -l go
 # which will generate files in a `protorepo` directory.
 ```
 
@@ -104,7 +104,7 @@ $ docker run ... namely/protoc-all -f protorepo/catalog/catalog.proto -l go
 
 ## gRPC Gateway
 
-This repo also provides a docker image `namely/gen-grpc-gateway` to generate a
+This repo also provides a docker image `skuznetsov/gen-grpc-gateway` to generate a
 [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway) server.
 By annotating your proto (see the grpc-gateway documentation), you can generate a
 server that acts as an HTTP server, and a gRPC client to your gRPC service.
@@ -112,7 +112,7 @@ server that acts as an HTTP server, and a gRPC client to your gRPC service.
 Generate a gRPC Gateway docker project with
 
 ```sh
-docker run -v `pwd`:/defs namely/gen-grpc-gateway -f path/to/your/proto.proto -s Service
+docker run -v `pwd`:/defs skuznetsov/gen-grpc-gateway -f path/to/your/proto.proto -s Service
 ```
 
 where `Service` is the name of your gRPC service defined in the proto. This will create a
@@ -142,16 +142,16 @@ listens on port `80` for HTTP traffic.
 
 ### Configuring grpc-gateway
 
-The gateway is configured using [spf13/viper](https://github.com/spf13/viper), see [gwy/templates/config.yaml.tmpl](https://github.com/namely/docker-protoc/blob/master/gwy/templates/config.yaml.tmpl) for configuration options.
+The gateway is configured using [spf13/viper](https://github.com/spf13/viper), see [gwy/templates/config.yaml.tmpl](https://github.com/skuznetsov/docker-protoc/blob/master/gwy/templates/config.yaml.tmpl) for configuration options.
 
 To configure your gateway to run under a prefix, set proxy.api-prefix to that prefix. For example, if you have `(google.api.http) = '/foo/bar'`, and set `proxy.api-prefix` to `/api/'`, your gateway will listen to requests on `'/api/foo/bar'`. This can also be set with the environment variable `<SERVICE>_PROXY_API-PREFIX` where `<SERVICE>` is the name of the service generating the gateway.
 
-See [gwy/test.sh](https://github.com/namely/docker-protoc/blob/master/gwy/test.sh) for an example of how to set the prefix with an environment variable.
+See [gwy/test.sh](https://github.com/skuznetsov/docker-protoc/blob/master/gwy/test.sh) for an example of how to set the prefix with an environment variable.
 
 ### HTTP Headers
 
 The gateway will turn any HTTP headers that it receives into gRPC metadata. Any
-[permanent HTTP headers](https://github.com/namely/docker-protoc/blob/2e7f0c921984c9d9fc7e42e6a7b9474292f11751/gwy/templates/main.go.tmpl#L61)
+[permanent HTTP headers](https://github.com/skuznetsov/docker-protoc/blob/2e7f0c921984c9d9fc7e42e6a7b9474292f11751/gwy/templates/main.go.tmpl#L61)
 will be prefixed with `grpcgateway-` in the metadata, so that your server receives both
 the HTTP client-to-gateway headers, as well as the gateway-to-gRPC server headers.
 
@@ -216,7 +216,7 @@ This repo also contains a Dockerfile for building a `grpc_cli`.
 Run it with
 
 ```sh
-docker run -v `pwd`:/defs --rm -it namely/grpc-cli call docker.for.mac.localhost:50051 \\
+docker run -v `pwd`:/defs --rm -it skuznetsov/grpc-cli call docker.for.mac.localhost:50051 \\
 LinkShortener.ResolveShortLink "short_link:'asdf'" --protofiles=link_shortener.proto
 ```
 
@@ -228,7 +228,7 @@ See the [grpc\_cli documentation](https://github.com/grpc/grpc/blob/master/doc/c
 for more information. You may find it useful to bind this to an alias:
 
 ```sh
-alias grpc_cli='docker run -v $PWD:/defs --rm -it namely/grpc-cli'
+alias grpc_cli='docker run -v $PWD:/defs --rm -it skuznetsov/grpc-cli'
 ```
 
 Note the use of single quotes in the alias, which avoids expanding the `$PWD` parameter when the alias
@@ -242,7 +242,7 @@ grpc_cli call docker.for.mac.localhost:50051 LinkShortener.ResolveShortLink "sho
 
 ## Contributing
 
-Thank you for considering a contribution to namely/docker-protoc!
+Thank you for considering a contribution to skuznetsov/docker-protoc!
 
 If you'd like to make an enhancement, or add a container for another language compiler, you will
 need to run one of the build scripts in this repo.  You will also need to be running Mac, Linux,
@@ -275,7 +275,7 @@ NODE_VERSION=15 GRPC_VERSION=1.35 make build
 To run the tests, identify your image tag from the build step and run `make test` as below:
 
 ```sh
-CONTAINER=namely/protoc-all:VVV make test
+CONTAINER=skuznetsov/protoc-all:VVV make test
 ```
 
 (`VVV` is your version from the tag in the console output when running `make build`.) Running this will
@@ -292,7 +292,7 @@ the language, the arguments to invoke the image with, the expected generated fil
 #### gRPC Gateway test
 
 ```sh
-CONTAINER=namely/gen-grpc-gateway:VVV make test-gwy
+CONTAINER=skuznetsov/gen-grpc-gateway:VVV make test-gwy
 ```
 
 ### Auto Dependency Managenement
@@ -308,17 +308,17 @@ via the CI (Github Action).
 
 #### Contributors
 
-Open a PR and ping one of the Namely employees who have worked on this repo recently.  We will take a look as soon as we can.\
+Open a PR and ping one of the skuznetsov employees who have worked on this repo recently.  We will take a look as soon as we can.\
 Thank you!!
 
-#### Namely Employees
+#### skuznetsov Employees
 
-Namely employees can merge PRs and cut a release/pre-release by drafting a new Github release and publishing them.\
+skuznetsov employees can merge PRs and cut a release/pre-release by drafting a new Github release and publishing them.\
 The release name should follow the same tag conventions described in  [this doc](#tag-conventions) and the gRPC version in the release name\
 must match the `GRPC_VERSION` configured in [variables.sh](./variables.sh).\
 A valid release/pre-release will be of the form `v${GRPC_VERSION}_${BUILD_VERSION}`/`v${GRPC_VERSION}_${BUILD_VERSION}-rc.${RC_VERSION}` respectively.\
 e.g `1.37_2`, `1.38_0-rc.3`.\
-Once a new **valid** Github release is published, new images will be published to [DockerHub](https://hub.docker.com/u/namely/) via CI.
+Once a new **valid** Github release is published, new images will be published to [DockerHub](https://hub.docker.com/u/skuznetsov/) via CI.
 
 ## Docker Troubleshooting
 
